@@ -1,3 +1,46 @@
 import "./components/nova-transacao-component.js";
 import "./components/saldo-component.js";
 import "./components/extrato-component.js";
+import { TipoTransacao } from "./types/TipoTransacao.js";
+
+let saldo = 3000;
+
+const elementoSaldo = document.querySelector(".saldo-valor .valor");
+elementoSaldo.textContent = saldo;
+
+const elementoFormulario = documet.querySelector(".block-nova-transacao form");
+elementoFormulario.addEventListener("submit", function() {
+    event.preventDefault();
+    if(!elementoFormulario.checkValidity()) {
+        alert("Preencha todos os campos da transação!");
+        return;
+    }
+
+    const inputTipoTransacao = elementoFormulario.querySelector("#tipoTransacao");
+    const inputValor = elementoFormulario.querySelector("#valor");
+    const inputData = elementoFormulario.querySelector("#data");
+
+    let tipoTransacao = inputTipoTransacao.value;
+    let valor = inputValor.value;
+    let data = inputData.value;
+
+    if (tipoTransacao == "Depósito") {
+        saldo += valor;
+    } else if (tipoTransacao == "Transferência" || tipoTransacao == "Pagamento de Boleto") {
+        saldo -= valor;
+    } else {
+        alert("Tipo de Transação é inválida");
+        return;
+    }
+
+    elementoSaldo.textContent = saldo;
+
+    const novaTransacao = {
+        tipoTransacao: tipoTransacao,
+        valor: valor,
+        data: data
+    }
+
+    console.log(novaTransacao);
+    elementoFormulario.reset();
+});
